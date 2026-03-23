@@ -1,5 +1,5 @@
 {
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "echo 'Vercel compiles TypeScript serverless functions automatically'",
+  "buildCommand": "cd ../.. && pnpm --filter @portfolio/contracts build",
   "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }
