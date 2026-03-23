@@ -105,9 +105,6 @@ importers:
       '@portfolio/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
-      '@portfolio/logger':
-        specifier: workspace:*
-        version: link:../../packages/logger
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.3

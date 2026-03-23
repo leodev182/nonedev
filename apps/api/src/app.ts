@@ -1,11 +1,11 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
+import pino from 'pino'
 import { env } from './config/env.js'
 import { registerRoutes } from './routes/index.js'
-import { createLogger } from '@portfolio/logger/server'
 
-const log = createLogger('api')
+const log = pino({ name: 'api', level: process.env['LOG_LEVEL'] ?? 'info' })
 
 export function createApp() {
   const app = new Hono()
