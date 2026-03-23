@@ -1,5 +1,6 @@
 {
   "framework": null,
+  "outputDirectory": ".",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "buildCommand": "cd ../.. && pnpm --filter @portfolio/contracts build && cd apps/api && node_modules/.bin/esbuild src/entry-vercel.ts --bundle --platform=node --target=node20 --format=esm --outfile=api/index.mjs --external:pino-pretty --external:pg-native",
   "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
