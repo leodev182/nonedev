@@ -15,5 +15,9 @@ const envSchema = z.object({
   CLOUDINARY_API_SECRET:   z.string(),
 })
 
-export const env = envSchema.parse(process.env)
+const result = envSchema.safeParse(process.env)
+if (!result.success) {
+  console.error('[env] Validation failed:', JSON.stringify(result.error.flatten()))
+}
+export const env = (result.success ? result.data : process.env) as z.infer<typeof envSchema>
 export type Env = z.infer<typeof envSchema>
