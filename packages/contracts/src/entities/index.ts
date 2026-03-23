@@ -1,3 +1,3 @@
-export * from './project.entity'
-export * from './article.entity'
-export * from './contact.entity'
+export * from './project.entity.js'
+export * from './article.entity.js'
+export * from './contact.entity.js'

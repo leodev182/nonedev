@@ -1,3 +1,3 @@
-export * from './project.schema'
-export * from './article.schema'
-export * from './contact.schema'
+export * from './project.schema.js'
+export * from './article.schema.js'
+export * from './contact.schema.js'

@@ -7,7 +7,7 @@ export const listProjects = async (c: Context) => {
   const featured      = c.req.query('featured') === 'true' ? true : undefined
   const isAuthed      = !!c.get('jwtPayload')
   const all           = isAuthed && c.req.query('all') === 'true' ? true : undefined
-  const data = await service.listProjects({ page, pageSize, featured, all })
+  const data = await service.listProjects({ page, pageSize, ...(featured !== undefined && { featured }), ...(all !== undefined && { all }) })
   return c.json({ data })
 }
 
@@ -35,5 +35,5 @@ export const updateProject = async (c: Context) => {
 export const deleteProject = async (c: Context) => {
   const id = c.req.param('id')!
   await service.deleteProject(id)
-  return c.json({ data: null }, 204)
+  return c.body(null, 204)
 }

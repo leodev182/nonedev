@@ -21,7 +21,8 @@ async function seedAdmins() {
       : []),
   ]
 
-  if (!candidates[0].email || !candidates[0].password) {
+  const first = candidates[0]
+  if (!first?.email || !first?.password) {
     console.error('❌ Faltan ADMIN_EMAIL y/o ADMIN_PASSWORD')
     process.exit(1)
   }

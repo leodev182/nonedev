@@ -1,1 +1,1 @@
-export * from './common.dto'
+export * from './common.dto.js'

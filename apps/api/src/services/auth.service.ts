@@ -12,7 +12,7 @@ export async function login(email: string, password: string) {
   if (!valid) return null
 
   const token = jwt.sign({ sub: admin.id, email: admin.email }, env.JWT_SECRET, {
-    expiresIn: env.JWT_EXPIRES_IN,
+    expiresIn: env.JWT_EXPIRES_IN as any,
   })
   return { token, admin: { id: admin.id, email: admin.email } }
 }
@@ -21,7 +21,7 @@ export async function refresh(token: string) {
   try {
     const payload = jwt.verify(token, env.JWT_SECRET) as { sub: string; email: string }
     const newToken = jwt.sign({ sub: payload.sub, email: payload.email }, env.JWT_SECRET, {
-      expiresIn: env.JWT_EXPIRES_IN,
+      expiresIn: env.JWT_EXPIRES_IN as any,
     })
     return { token: newToken }
   } catch {
