@@ -38,4 +38,7 @@ async function handler(req, res) {
   res.end(Buffer.from(await webRes.arrayBuffer()))
 }
 
+// Export as both plain CJS (typeof mod === 'function') and
+// ESM-style default (mod.default) to satisfy Vercel's Hono adapter check
 module.exports = handler
+module.exports.default = handler
