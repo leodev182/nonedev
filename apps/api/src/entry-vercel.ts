@@ -1,13 +1,8 @@
-// CJS-style entry: no ESM import statements so esbuild preserves module.exports = fn verbatim.
-// When a file has import/export statements, esbuild wraps it in __toCommonJS() and
-// our module.exports assignment gets overwritten with an empty object.
-// Using require() keeps this file as CJS — esbuild outputs module.exports = handler directly.
-/* eslint-disable @typescript-eslint/no-var-requires */
-// @ts-nocheck
-const { app } = require('./app.js')
+import { app } from './app.js'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 
 // Adapts Node.js IncomingMessage/ServerResponse → Web Request/Response for Hono
-async function handler(req, res) {
+export default async function handler(req: IncomingMessage, res: ServerResponse) {
   const host = req.headers['host'] ?? 'localhost'
   const url = new URL(req.url ?? '/', `https://${host}`)
 
@@ -17,7 +12,7 @@ async function handler(req, res) {
   }
 
   const method = (req.method ?? 'GET').toUpperCase()
-  const chunks = []
+  const chunks: Buffer[] = []
   if (method !== 'GET' && method !== 'HEAD') {
     for await (const chunk of req) {
       chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
@@ -37,8 +32,3 @@ async function handler(req, res) {
   webRes.headers.forEach((v, k) => res.setHeader(k, v))
   res.end(Buffer.from(await webRes.arrayBuffer()))
 }
-
-// Export as both plain CJS (typeof mod === 'function') and
-// ESM-style default (mod.default) to satisfy Vercel's Hono adapter check
-module.exports = handler
-module.exports.default = handler
