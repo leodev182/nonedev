@@ -1,7 +1,5 @@
 {
   "framework": null,
-  "outputDirectory": ".",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm --filter @portfolio/contracts build && cd apps/api && node_modules/.bin/esbuild src/entry-vercel.ts --bundle --platform=node --target=node20 --format=esm --outfile=api/index.js --external:pino-pretty --external:pg-native",
-  "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
+  "buildCommand": "cd ../.. && pnpm --filter @portfolio/contracts build && cd apps/api && mkdir -p .vercel/output/functions/api/index.func && node_modules/.bin/esbuild src/entry-vercel.ts --bundle --platform=node --target=node20 --format=esm --outfile=.vercel/output/functions/api/index.func/index.mjs --external:pino-pretty --external:pg-native && printf '{\"runtime\":\"nodejs20.x\",\"handler\":\"index.mjs\",\"launcherType\":\"Nodejs\",\"shouldAddHelpers\":false}' > .vercel/output/functions/api/index.func/.vc-config.json && printf '{\"version\":3,\"routes\":[{\"src\":\"^/(.*)\",\"dest\":\"/api/index\"}]}' > .vercel/output/config.json"
 }
