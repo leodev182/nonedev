@@ -1,0 +1,284 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/shared/Navbar.astro'
+import { getLocalePath } from '@/i18n'
+import { getProjects, getProjectBySlug } from '@/lib/api'
+import type { Project } from '@portfolio/contracts'
+
+export async function getStaticPaths() {
+  const projects = await getProjects({ pageSize: 50 })
+  return projects.map(p => ({ params: { slug: p.slug }, props: { project: p } }))
+}
+
+interface Props { project: Project }
+const { project } = Astro.props
+const locale = 'es'
+
+function md(text: string): string {
+  return text
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/^(?!<[hbulipc])(.+)$/gm, (m) => m.startsWith('<') ? m : `<p>${m}</p>`)
+}
+---
+
+<BaseLayout locale={locale} title={`${project.title} — nonedev`} description={project.summary}>
+  <Navbar locale={locale} />
+  <main class="project-page">
+
+    <!-- Hero cover -->
+    <div class="project-hero">
+      {project.coverUrl
+        ? <img src={project.coverUrl} alt={project.title} class="project-hero__img" />
+        : <div class="project-hero__placeholder">
+            <span class="project-hero__letter">{project.title.charAt(0)}</span>
+          </div>
+      }
+      <div class="project-hero__overlay" />
+    </div>
+
+    <div class="inner">
+      <a href={getLocalePath(locale, '/proyectos')} class="back-link">← Proyectos</a>
+
+      <!-- Header -->
+      <header class="project-header">
+        <div class="project-header__badges">
+          {project.platforms.map(p => (
+            <span class="badge badge--platform">{p.toUpperCase()}</span>
+          ))}
+          {project.tags.includes('colaboracion') && (
+            <span class="badge badge--collab">Colaborador</span>
+          )}
+          {project.tags.includes('personal') && (
+            <span class="badge badge--personal">Personal</span>
+          )}
+        </div>
+
+        <h1 class="project-header__title">{project.title}</h1>
+        <p class="project-header__summary">{project.summary}</p>
+
+        <!-- Links -->
+        <div class="project-header__links">
+          {project.demoUrl && (
+            <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+              </svg>
+              Ver sitio
+            </a>
+          )}
+          {project.repoUrl && (
+            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" class="btn btn--ghost">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+              GitHub
+            </a>
+          )}
+        </div>
+      </header>
+
+      <!-- Stack -->
+      <section class="project-stack">
+        <h2 class="section-label">Stack</h2>
+        <div class="stack-list">
+          {project.stack.map(s => <span class="stack-tag">{s}</span>)}
+        </div>
+      </section>
+
+      <!-- Contenido -->
+      {project.content && (
+        <section class="project-content">
+          <h2 class="section-label">Sobre el proyecto</h2>
+          <div class="project-body" set:html={md(project.content)} />
+        </section>
+      )}
+
+      <footer class="project-footer">
+        <a href={getLocalePath(locale, '/proyectos')} class="back-link">← Volver a proyectos</a>
+      </footer>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .project-page { min-height: 100svh; padding-top: var(--nav-h); }
+
+  /* Hero */
+  .project-hero {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    overflow: hidden;
+    margin-top: calc(-1 * var(--nav-h));
+    padding-top: var(--nav-h);
+  }
+
+  .project-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .project-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(139,92,246,0.18) 0%, rgba(0,232,122,0.06) 50%, rgba(9,9,14,0.9) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-hero__letter {
+    font-size: 9rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.04);
+    user-select: none;
+  }
+
+  .project-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, var(--color-bg) 100%);
+  }
+
+  /* Inner */
+  .inner {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+  }
+
+  /* Back */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-bottom: 2rem;
+    transition: color .2s;
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--color-text); }
+
+  /* Header */
+  .project-header { margin-bottom: 3rem; }
+
+  .project-header__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    padding: .2rem .55rem;
+    border-radius: var(--radius-sm);
+  }
+  .badge--platform { color: var(--color-green); background: rgba(0,232,122,.1); border: 1px solid rgba(0,232,122,.2); }
+  .badge--collab   { color: #f59e0b; background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.2); }
+  .badge--personal { color: var(--color-purple); background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.2); }
+
+  .project-header__title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+  }
+
+  .project-header__summary {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+    margin-bottom: 1.75rem;
+    max-width: 640px;
+  }
+
+  .project-header__links { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .6rem 1.25rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: all .2s var(--ease);
+  }
+  .btn--primary {
+    background: var(--color-green);
+    color: #09090e;
+  }
+  .btn--primary:hover { background: #00c96e; }
+  .btn--ghost {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+  }
+  .btn--ghost:hover { color: var(--color-text); border-color: rgba(255,255,255,.2); }
+
+  /* Stack */
+  .project-stack { margin-bottom: 3rem; }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: .14em;
+    color: var(--color-green);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .stack-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+  .stack-tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    padding: .3rem .7rem;
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  /* Content */
+  .project-content { margin-bottom: 3rem; }
+
+  .project-body {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.85;
+  }
+  .project-body :global(h2) { font-size: 1.35rem; font-weight: 700; color: var(--color-text); margin: 2.5rem 0 1rem; letter-spacing: -.02em; }
+  .project-body :global(h3) { font-size: 1.1rem; font-weight: 600; color: var(--color-text); margin: 2rem 0 .75rem; }
+  .project-body :global(p) { margin-bottom: 1.25rem; }
+  .project-body :global(strong) { color: var(--color-text); font-weight: 600; }
+  .project-body :global(code) { font-family: var(--font-mono); font-size: .85em; background: rgba(255,255,255,.06); padding: .15em .4em; border-radius: 3px; }
+  .project-body :global(blockquote) { border-left: 3px solid var(--color-purple); padding-left: 1.25rem; color: var(--color-text-secondary); font-style: italic; margin: 1.5rem 0; }
+  .project-body :global(ul) { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+  .project-body :global(li) { margin-bottom: .5rem; list-style: disc; }
+
+  /* Footer */
+  .project-footer { padding-top: 2rem; border-top: 1px solid var(--color-border); }
+
+  @media (max-width: 640px) {
+    .inner { padding: 2rem 1.25rem 4rem; }
+    .project-hero { height: 220px; }
+  }
+</style>

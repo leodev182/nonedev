@@ -1,0 +1,313 @@
+---
+import type { Locale } from '@/i18n'
+import { useTranslations, getLocalePath, getAlternateLocale } from '@/i18n'
+import Logo3D from './Logo3D.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = useTranslations(locale)
+const altLocale = getAlternateLocale(locale)
+---
+
+<header class="navbar">
+  <nav class="navbar__inner">
+    <!-- Brand: logo 3D nonedev -->
+    <Logo3D />
+
+    <!-- Links -->
+    <ul class="navbar__links">
+      <li><a href={getLocalePath(locale, '/#inicio')}>{t('nav', 'inicio')}</a></li>
+      <li><a href={getLocalePath(locale, '/#stack')}>{t('nav', 'stack')}</a></li>
+      <li><a href={getLocalePath(locale, '/proyectos')}>{t('nav', 'proyectos')}</a></li>
+      <li><a href={getLocalePath(locale, '/articulos')}>{t('nav', 'articulos')}</a></li>
+      <li><a href={getLocalePath(locale, '/#contacto')}>{t('nav', 'contacto')}</a></li>
+    </ul>
+
+    <!-- Acciones -->
+    <div class="navbar__actions">
+      <!-- Redes sociales -->
+      <div class="navbar__social">
+        <a href="https://github.com/leodev182" target="_blank" rel="noopener" class="social-link" title="GitHub" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/leoartdev" target="_blank" rel="noopener" class="social-link" title="LinkedIn" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+      </div>
+
+      <div class="navbar__divider"></div>
+
+      <!-- Language switch -->
+      <a href={getLocalePath(altLocale, '/')} class="lang-switch" title="Switch language">
+        <span class={locale === 'es' ? 'lang--active' : ''}>ES</span>
+        <span class="lang-sep">/</span>
+        <span class={locale === 'en' ? 'lang--active' : ''}>EN</span>
+      </a>
+
+      <!-- CV -->
+      <a href="/cv.pdf" target="_blank" rel="noopener" class="btn-cv">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        {t('nav', 'cv')}
+      </a>
+
+      <!-- Hamburger (mobile) -->
+      <button class="navbar__hamburger" id="navbar-hamburger" aria-label="Menú" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- Mobile drawer -->
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Menú de navegación">
+  <ul>
+    <li><a href={getLocalePath(locale, '/#inicio')}>{t('nav', 'inicio')}</a></li>
+    <li><a href={getLocalePath(locale, '/#stack')}>{t('nav', 'stack')}</a></li>
+    <li><a href={getLocalePath(locale, '/proyectos')}>{t('nav', 'proyectos')}</a></li>
+    <li><a href={getLocalePath(locale, '/articulos')}>{t('nav', 'articulos')}</a></li>
+    <li><a href={getLocalePath(locale, '/#contacto')}>{t('nav', 'contacto')}</a></li>
+  </ul>
+  <div class="mobile-menu__footer">
+    <a href={getLocalePath(altLocale, '/')} class="lang-switch">
+      <span class={locale === 'es' ? 'lang--active' : ''}>ES</span>
+      <span class="lang-sep">/</span>
+      <span class={locale === 'en' ? 'lang--active' : ''}>EN</span>
+    </a>
+    <a href="/cv.pdf" target="_blank" rel="noopener" class="btn-cv">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      {t('nav', 'cv')}
+    </a>
+  </div>
+</div>
+
+<script>
+  const hamburger = document.getElementById('navbar-hamburger')!
+  const mobileMenu = document.getElementById('mobile-menu')!
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.contains('open')
+    hamburger.classList.toggle('open')
+    mobileMenu.classList.toggle('open')
+    hamburger.setAttribute('aria-expanded', String(!isOpen))
+    document.body.style.overflow = isOpen ? '' : 'hidden'
+  })
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open')
+      mobileMenu.classList.remove('open')
+      hamburger.setAttribute('aria-expanded', 'false')
+      document.body.style.overflow = ''
+    })
+  })
+</script>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: var(--nav-h);
+    background: rgba(9, 9, 14, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .navbar__inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  /* Brand */
+  .navbar__brand {
+    font-weight: 800;
+    font-size: var(--text-base);
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: opacity 0.2s;
+  }
+  .navbar__brand:hover { opacity: 0.85; }
+
+  .navbar__brand-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-green);
+    box-shadow: 0 0 8px var(--color-green);
+    margin-top: 1px;
+    flex-shrink: 0;
+    animation: dot-pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes dot-pulse {
+    0%, 100% { box-shadow: 0 0 6px var(--color-green); opacity: 1; }
+    50%       { box-shadow: 0 0 2px var(--color-green); opacity: 0.7; }
+  }
+
+  /* Links */
+  .navbar__links {
+    display: flex;
+    list-style: none;
+    gap: 0.15rem;
+    flex: 1;
+  }
+
+  .navbar__links a {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-sm);
+    transition: color 0.2s var(--ease), background 0.2s var(--ease);
+  }
+
+  .navbar__links a:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  /* Acciones */
+  .navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  /* Redes sociales */
+  .navbar__social { display: flex; align-items: center; gap: 0.15rem; }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    transition: color 0.2s var(--ease), background 0.2s var(--ease);
+  }
+  .social-link:hover { color: var(--color-text); background: rgba(255, 255, 255, 0.06); }
+  .social-link svg { width: 15px; height: 15px; }
+
+  /* Divisor */
+  .navbar__divider { width: 1px; height: 18px; background: var(--color-border); margin: 0 0.25rem; }
+
+  /* Language switch */
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: color 0.2s var(--ease), background 0.2s var(--ease);
+  }
+  .lang-switch:hover { color: var(--color-text-secondary); background: rgba(255, 255, 255, 0.04); }
+  .lang-sep { opacity: 0.25; margin: 0 0.1rem; }
+  .lang--active { color: var(--color-green); }
+
+  /* CV button */
+  .btn-cv {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.42rem 1rem;
+    border: 1px solid rgba(0, 232, 122, 0.3);
+    color: var(--color-green);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: background 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+    white-space: nowrap;
+  }
+  .btn-cv:hover {
+    background: var(--color-green-dim);
+    border-color: var(--color-green);
+    box-shadow: 0 0 20px var(--color-green-glow);
+  }
+
+  /* Hamburger */
+  .navbar__hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    transition: background 0.2s;
+  }
+  .navbar__hamburger:hover { background: rgba(255, 255, 255, 0.06); }
+  .navbar__hamburger span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+  }
+  .navbar__hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .navbar__hamburger.open span:nth-child(2) { opacity: 0; }
+  .navbar__hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    background: rgba(9, 9, 14, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border);
+    z-index: 99;
+    padding: 1.5rem 1.5rem 2rem;
+  }
+  .mobile-menu.open { display: block; }
+
+  .mobile-menu ul { list-style: none; display: flex; flex-direction: column; margin-bottom: 1.5rem; }
+  .mobile-menu ul a {
+    display: block;
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+    transition: color 0.2s;
+  }
+  .mobile-menu ul a:hover { color: var(--color-text); }
+
+  .mobile-menu__footer { display: flex; align-items: center; gap: 1rem; padding-top: 0.5rem; }
+
+  @media (max-width: 768px) {
+    .navbar__links, .navbar__social, .navbar__divider { display: none; }
+    .navbar__hamburger { display: flex; }
+    .navbar__inner { padding: 0 1.25rem; }
+  }
+</style>

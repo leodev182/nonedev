@@ -1,0 +1,107 @@
+---
+import type { Locale } from '@/i18n'
+import { useTranslations } from '@/i18n'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = useTranslations(locale)
+
+const proficient = [
+  'TypeScript', 'JavaScript', 'Java',
+  'React', 'Node.js', 'Android', 'PostgreSQL',
+]
+
+const learning = ['Rust', 'Go', 'Dart / Flutter']
+---
+
+<div class="section-divider"><hr /></div>
+
+<section id="stack" class="section">
+  <div class="section__header">
+    <p class="section__tag">{t('stack', 'etiqueta')}</p>
+    <h2 class="section__title">{t('stack', 'titulo')}</h2>
+    <p class="section__subtitle">{t('stack', 'subtitulo')}</p>
+  </div>
+
+  <div class="stack-groups">
+    <div class="stack-group">
+      <p class="stack-group__label">{t('stack', 'domino')}</p>
+      <div class="stack-badges">
+        {proficient.map((item) => (
+          <span class="stack-badge">{item}</span>
+        ))}
+      </div>
+    </div>
+
+    <div class="stack-group">
+      <p class="stack-group__label">{t('stack', 'aprendiendo')}</p>
+      <div class="stack-badges">
+        {learning.map((item) => (
+          <span class="stack-badge stack-badge--learning">
+            <span class="stack-badge__dot" aria-hidden="true"></span>
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stack-groups { display: flex; flex-direction: column; gap: 2.5rem; }
+
+  .stack-group__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.15em;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .stack-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+  .stack-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    background: var(--color-surface);
+    transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+    cursor: default;
+  }
+
+  .stack-badge:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+    background: var(--color-surface-hover);
+  }
+
+  .stack-badge--learning {
+    border-style: dashed;
+    color: var(--color-text-secondary);
+    background: transparent;
+  }
+
+  .stack-badge--learning:hover {
+    border-color: rgba(0, 232, 122, 0.35);
+    color: var(--color-green);
+    background: var(--color-green-dim);
+    border-style: dashed;
+  }
+
+  .stack-badge__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-green);
+    flex-shrink: 0;
+  }
+</style>

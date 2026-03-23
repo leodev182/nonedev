@@ -1,0 +1,423 @@
+---
+import type { Locale } from '@/i18n'
+import type { Project } from '@portfolio/contracts'
+import { useTranslations, getLocalePath } from '@/i18n'
+
+interface Props {
+  locale: Locale
+  projects: Project[]
+}
+
+const { locale, projects } = Astro.props
+const t = useTranslations(locale)
+
+// Todos los stacks únicos para los filtros
+const allStacks = [...new Set(projects.flatMap(p => p.stack))].sort()
+---
+
+<main class="projects-page">
+  <div class="projects-page__inner">
+
+    <!-- Header -->
+    <header class="projects-header">
+      <a href={getLocalePath(locale, '/')} class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        {locale === 'es' ? 'Volver' : 'Back'}
+      </a>
+      <p class="projects-header__tag">PROYECTOS</p>
+      <h1 class="projects-header__title">
+        {locale === 'es' ? 'Todo el trabajo' : 'All the work'}
+      </h1>
+      <p class="projects-header__sub">
+        {locale === 'es'
+          ? `${projects.length} proyectos — personales, clientes y colaboraciones.`
+          : `${projects.length} projects — personal, clients and collaborations.`}
+      </p>
+    </header>
+
+    <!-- Filtros -->
+    <div class="filters" id="filters">
+      <button class="filter-btn filter-btn--active" data-filter="all">
+        {locale === 'es' ? 'Todos' : 'All'}
+      </button>
+      {allStacks.map(stack => (
+        <button class="filter-btn" data-filter={stack.toLowerCase()}>
+          {stack}
+        </button>
+      ))}
+    </div>
+
+    <!-- Grid -->
+    <div class="projects-grid" id="projects-grid">
+      {projects.map((project) => (
+        <a
+          href={getLocalePath(locale, `/proyectos/${project.slug}`)}
+          class="project-card"
+          data-stack={project.stack.map(s => s.toLowerCase()).join(' ')}
+          data-role={project.tags.includes('colaboracion') ? 'collab' : 'owner'}
+        >
+          <!-- Thumbnail -->
+          <div class="project-card__thumb">
+            {project.coverUrl
+              ? <img src={project.coverUrl} alt={project.title} loading="lazy" />
+              : <div class="project-card__thumb-placeholder">
+                  <span class="project-card__thumb-letter">
+                    {project.title.charAt(0)}
+                  </span>
+                </div>
+            }
+            <div class="project-card__badges">
+              {project.platforms.map(p => (
+                <span class="badge badge--platform">{p.toUpperCase()}</span>
+              ))}
+              {project.tags.includes('colaboracion') && (
+                <span class="badge badge--collab">
+                  {locale === 'es' ? 'Colaborador' : 'Collaborator'}
+                </span>
+              )}
+              {project.tags.includes('personal') && (
+                <span class="badge badge--personal">Personal</span>
+              )}
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="project-card__body">
+            <h2 class="project-card__title">{project.title}</h2>
+            <p class="project-card__summary">{project.summary}</p>
+
+            <!-- Stack -->
+            <div class="project-card__stack">
+              {project.stack.map(s => (
+                <span class="stack-tag">{s}</span>
+              ))}
+            </div>
+
+            <!-- Links -->
+            <div class="project-card__links">
+              {project.demoUrl && (
+                <span class="project-card__link project-card__link--demo">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+                  </svg>
+                  {locale === 'es' ? 'Ver sitio' : 'Live site'}
+                </span>
+              )}
+              {project.repoUrl && (
+                <span class="project-card__link">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                  </svg>
+                  GitHub
+                </span>
+              )}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Empty state (cuando no hay resultados del filtro) -->
+    <p class="empty-state" id="empty-state" hidden>
+      {locale === 'es' ? 'No hay proyectos con ese filtro.' : 'No projects match that filter.'}
+    </p>
+
+  </div>
+</main>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn')
+  const cards = document.querySelectorAll<HTMLElement>('.project-card')
+  const emptyState = document.getElementById('empty-state')!
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Activar botón
+      filterBtns.forEach(b => b.classList.remove('filter-btn--active'))
+      btn.classList.add('filter-btn--active')
+
+      const filter = btn.dataset.filter!
+
+      let visible = 0
+      cards.forEach(card => {
+        const stack = card.dataset.stack ?? ''
+        const show = filter === 'all' || stack.includes(filter)
+        card.style.display = show ? '' : 'none'
+        if (show) visible++
+      })
+
+      emptyState.hidden = visible > 0
+    })
+  })
+</script>
+
+<style>
+  .projects-page {
+    min-height: 100svh;
+    padding-top: var(--nav-h);
+  }
+
+  .projects-page__inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  /* Back link */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-bottom: 2.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--color-text); }
+
+  /* Header */
+  .projects-header { margin-bottom: 3rem; }
+
+  .projects-header__tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.18em;
+    color: var(--color-green);
+    margin-bottom: 1rem;
+  }
+
+  .projects-header__title {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+  }
+
+  .projects-header__sub {
+    font-size: var(--text-base);
+    color: var(--color-muted);
+  }
+
+  /* Filtros */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .filter-btn {
+    padding: 0.35rem 0.85rem;
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--color-muted);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.18s var(--ease);
+    letter-spacing: 0.03em;
+  }
+
+  .filter-btn:hover {
+    color: var(--color-text);
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .filter-btn--active {
+    color: var(--color-green);
+    border-color: rgba(0, 232, 122, 0.4);
+    background: rgba(0, 232, 122, 0.06);
+  }
+
+  /* Grid */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Card */
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+
+  .project-card:hover {
+    border-color: rgba(139, 92, 246, 0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(139,92,246,0.08);
+  }
+
+  /* Thumb */
+  .project-card__thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .project-card__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .project-card:hover .project-card__thumb img {
+    transform: scale(1.04);
+  }
+
+  .project-card__thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+      rgba(139, 92, 246, 0.15) 0%,
+      rgba(0, 232, 122, 0.05) 50%,
+      rgba(9, 9, 14, 0.8) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-card__thumb-letter {
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.06);
+    letter-spacing: -0.05em;
+    user-select: none;
+  }
+
+  /* Badges sobre el thumb */
+  .project-card__badges {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .badge--platform {
+    color: var(--color-green);
+    background: rgba(0, 232, 122, 0.1);
+    border: 1px solid rgba(0, 232, 122, 0.2);
+  }
+
+  .badge--collab {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .badge--personal {
+    color: var(--color-purple);
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+  }
+
+  /* Body */
+  .project-card__body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .project-card__title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+  }
+
+  .project-card__summary {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  /* Stack tags */
+  .project-card__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: auto;
+  }
+
+  .stack-tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    padding: 0.2rem 0.55rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-muted);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .project-card:hover .stack-tag {
+    color: var(--color-text-secondary);
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  /* Links */
+  .project-card__links {
+    display: flex;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+    margin-top: 0.5rem;
+  }
+
+  .project-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-muted);
+    transition: color 0.2s;
+  }
+
+  .project-card__link--demo { color: var(--color-green); }
+  .project-card__link:hover { color: var(--color-text); }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    color: var(--color-muted);
+    font-size: var(--text-base);
+    padding: 4rem 0;
+  }
+
+  @media (max-width: 640px) {
+    .projects-page__inner { padding: 2rem 1.25rem 4rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+  }
+</style>

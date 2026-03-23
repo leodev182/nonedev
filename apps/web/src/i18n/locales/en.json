@@ -1,0 +1,53 @@
+{
+  "nav": {
+    "inicio": "Home",
+    "proyectos": "Projects",
+    "stack": "Stack",
+    "articulos": "Articles",
+    "contacto": "Contact",
+    "cv": "CV"
+  },
+  "hero": {
+    "disponible": "available for projects",
+    "plataformas": "Full Stack · Mobile · Desktop",
+    "saludo": "Hi, I'm",
+    "descripcion": "I build software that lives on multiple platforms — web, mobile and desktop. I write about what I learn while developing.",
+    "verProyectos": "View projects",
+    "leerArticulos": "Read articles",
+    "tambienEn": "Also on"
+  },
+  "stack": {
+    "etiqueta": "Stack",
+    "titulo": "Technologies",
+    "subtitulo": "What I work with daily and what's on my radar.",
+    "domino": "Proficient",
+    "aprendiendo": "Learning"
+  },
+  "proyectos": {
+    "etiqueta": "Projects",
+    "titulo": "Featured work",
+    "subtitulo": "Some of the projects I've worked on recently.",
+    "ver": "View",
+    "verTodos": "View all projects"
+  },
+  "articulos": {
+    "etiqueta": "Articles",
+    "titulo": "Recent posts",
+    "subtitulo": "I write about what I learn while developing.",
+    "verTodos": "View all articles",
+    "minLectura": "min read"
+  },
+  "contacto": {
+    "titulo": "Let's talk",
+    "subtitulo": "Have a project in mind? Write to me.",
+    "nombre": "Name",
+    "email": "Email",
+    "mensaje": "Message",
+    "enviar": "Send message",
+    "exito": "Message sent! I'll get back to you soon.",
+    "error": "Something went wrong. Please try again."
+  },
+  "footer": {
+    "derechos": "All rights reserved"
+  }
+}

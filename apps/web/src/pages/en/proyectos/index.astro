@@ -1,0 +1,14 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/shared/Navbar.astro'
+import ProjectsGrid from '@/components/sections/ProjectsGrid.astro'
+import { getProjects } from '@/lib/api'
+
+const locale = 'en'
+const projects = await getProjects({ pageSize: 20 })
+---
+
+<BaseLayout locale={locale} title="Projects — nonedev" description="All projects by Leo Duque — fullstack, web and mobile.">
+  <Navbar locale={locale} />
+  <ProjectsGrid locale={locale} projects={projects} />
+</BaseLayout>

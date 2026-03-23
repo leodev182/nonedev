@@ -1,0 +1,32 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/shared/Navbar.astro'
+import BlackHoleHero from '@/components/hero/BlackHoleHero.astro'
+import StackSection from '@/components/sections/StackSection.astro'
+import ProjectsSection from '@/components/sections/ProjectsSection.astro'
+import ArticlesSection from '@/components/sections/ArticlesSection.astro'
+import ContactSection from '@/components/sections/ContactSection.astro'
+import { useTranslations } from '@/i18n'
+import { getProjects, getArticles } from '@/lib/api'
+
+const locale = 'es'
+const t = useTranslations(locale)
+
+const [featuredProjects, recentArticles] = await Promise.all([
+  getProjects({ featured: true }),
+  getArticles({ locale: 'es', pageSize: 3 }),
+])
+---
+
+<BaseLayout
+  locale={locale}
+  title="nonedev — Leo Duque"
+  description={t('hero', 'descripcion')}
+>
+  <Navbar locale={locale} />
+  <BlackHoleHero locale={locale} name="Leo Duque" />
+  <StackSection locale={locale} />
+  <ProjectsSection locale={locale} projects={featuredProjects} />
+  <ArticlesSection locale={locale} articles={recentArticles} />
+  <ContactSection locale={locale} />
+</BaseLayout>

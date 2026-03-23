@@ -1,0 +1,53 @@
+{
+  "nav": {
+    "inicio": "Inicio",
+    "proyectos": "Proyectos",
+    "stack": "Stack",
+    "articulos": "Artículos",
+    "contacto": "Contacto",
+    "cv": "CV"
+  },
+  "hero": {
+    "disponible": "disponible para proyectos",
+    "plataformas": "Full Stack · Mobile · Desktop",
+    "saludo": "Hola, soy",
+    "descripcion": "Construyo software que vive en múltiples plataformas — web, mobile y desktop. Escribo sobre lo que aprendo mientras desarrollo.",
+    "verProyectos": "Ver proyectos",
+    "leerArticulos": "Leer artículos",
+    "tambienEn": "También en"
+  },
+  "stack": {
+    "etiqueta": "Stack",
+    "titulo": "Tecnologías",
+    "subtitulo": "Con lo que trabajo a diario y lo que tengo en el radar.",
+    "domino": "Domino",
+    "aprendiendo": "Aprendiendo"
+  },
+  "proyectos": {
+    "etiqueta": "Proyectos",
+    "titulo": "Trabajo destacado",
+    "subtitulo": "Algunos de los proyectos en los que he trabajado recientemente.",
+    "ver": "Ver",
+    "verTodos": "Ver todos los proyectos"
+  },
+  "articulos": {
+    "etiqueta": "Artículos",
+    "titulo": "Posts recientes",
+    "subtitulo": "Escribo sobre lo que aprendo mientras desarrollo.",
+    "verTodos": "Ver todos los artículos",
+    "minLectura": "min de lectura"
+  },
+  "contacto": {
+    "titulo": "Hablemos",
+    "subtitulo": "¿Tienes un proyecto en mente? Escríbeme.",
+    "nombre": "Nombre",
+    "email": "Email",
+    "mensaje": "Mensaje",
+    "enviar": "Enviar mensaje",
+    "exito": "¡Mensaje enviado! Te responderé pronto.",
+    "error": "Algo salió mal. Intenta de nuevo."
+  },
+  "footer": {
+    "derechos": "Todos los derechos reservados"
+  }
+}
