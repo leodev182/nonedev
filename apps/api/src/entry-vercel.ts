@@ -2,7 +2,7 @@ import { app } from './app.js'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
 // Adapts Node.js IncomingMessage/ServerResponse → Web Request/Response for Hono
-export default async function handler(req: IncomingMessage, res: ServerResponse) {
+async function handler(req: IncomingMessage, res: ServerResponse) {
   const host = req.headers['host'] ?? 'localhost'
   const url = new URL(req.url ?? '/', `https://${host}`)
 
@@ -32,3 +32,5 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   webRes.headers.forEach((v, k) => res.setHeader(k, v))
   res.end(Buffer.from(await webRes.arrayBuffer()))
 }
+
+module.exports = handler

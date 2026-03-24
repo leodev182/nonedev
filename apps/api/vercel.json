@@ -1,4 +1,4 @@
 {
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm --filter @portfolio/contracts build && cd apps/api && node_modules/.bin/esbuild src/entry-vercel.ts --bundle --platform=node --target=node20 --format=cjs --outfile=api/index.js --external:pino-pretty --external:pg-native --footer:js=\"if(module.exports.default)module.exports=module.exports.default;\""
+  "buildCommand": "cd ../.. && pnpm --filter @portfolio/contracts build && cd apps/api && node_modules/.bin/esbuild src/entry-vercel.ts --bundle --platform=node --target=node20 --format=cjs --outfile=api/index.js --external:pino-pretty --external:pg-native"
 }
