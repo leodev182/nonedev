@@ -3,7 +3,8 @@
   "buildCommand": "pnpm --filter @portfolio/contracts build && pnpm exec esbuild src/entry-vercel.ts --bundle --platform=node --target=node20 --format=cjs --outfile=api/index.js --external:pino-pretty --external:pg-native",
   "functions": {
     "api/index.js": {
-      "runtime": "nodejs20.x"
+      "memory": 1024,
+      "maxDuration": 30
     }
   }
 }
