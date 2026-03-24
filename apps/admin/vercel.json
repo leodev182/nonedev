@@ -3,5 +3,6 @@
   "outputDirectory": "dist/admin/browser",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "framework": null,
+  "ignoreCommand": "git diff HEAD~1 --name-only | grep -q '^apps/admin\\|^packages/'",
   "rewrites": [{ "source": "/((?!.*\\.).*)", "destination": "/index.html" }]
 }

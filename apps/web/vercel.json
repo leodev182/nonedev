@@ -2,5 +2,6 @@
   "buildCommand": "cd ../.. && pnpm --filter @portfolio/web build",
   "outputDirectory": "dist",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "framework": "astro"
+  "framework": "astro",
+  "ignoreCommand": "git diff HEAD~1 --name-only | grep -q '^apps/web\\|^packages/'"
 }
