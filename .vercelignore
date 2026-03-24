@@ -4,3 +4,4 @@ docker-compose.yml
 apps/api/Dockerfile.dev
 apps/web/Dockerfile.dev
 apps/admin/Dockerfile.dev
+apps/api/src/index.ts
