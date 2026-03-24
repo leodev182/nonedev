@@ -1,10 +1,4 @@
 {
-  "framework": null,
-  "buildCommand": "pnpm --filter @portfolio/contracts build && pnpm exec esbuild src/entry-vercel.ts --bundle --platform=node --target=node20 --format=cjs --outfile=api/index.js --external:pino-pretty --external:pg-native",
-  "functions": {
-    "api/index.js": {
-      "memory": 1024,
-      "maxDuration": 30
-    }
-  }
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "buildCommand": "cd ../.. && pnpm --filter @portfolio/contracts build && cd apps/api && node_modules/.bin/esbuild src/entry-vercel.ts --bundle --platform=node --target=node20 --format=cjs --outfile=api/index.js --external:pino-pretty --external:pg-native"
 }
