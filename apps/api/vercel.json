@@ -1,6 +1,4 @@
 {
-  "framework": null,
-  "outputDirectory": ".",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile && pnpm --filter @portfolio/contracts build",
   "functions": { "api/index.ts": { "maxDuration": 10 } },
   "routes": [{ "src": "/(.*)", "dest": "api/index.ts" }]
