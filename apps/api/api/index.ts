@@ -1,3 +1,4 @@
-export default function handler() {
-  return new Response("OK");
-}
+import { handle } from "hono/vercel";
+import { app } from "../src/app";
+
+export default handle(app);
