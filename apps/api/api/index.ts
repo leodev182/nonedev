@@ -1,4 +1,4 @@
-import { handle } from "hono/vercel";
+import { Hono } from "hono";
 import { app } from "../src/app.hono";
 
-export default handle(app);
+export default app;
