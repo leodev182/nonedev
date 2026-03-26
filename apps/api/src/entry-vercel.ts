@@ -1,3 +1,3 @@
-import { app } from './app.js'
+import { app } from './app.hono.js'
 
 export default app
