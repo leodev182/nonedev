@@ -1,8 +1,7 @@
 {
   "framework": null,
   "outputDirectory": ".",
-  "nodeVersion": "20.x",
-  "rewrites": [
+"rewrites": [
     { "source": "/(.*)", "destination": "/api" }
   ],
   "ignoreCommand": "! git diff --quiet HEAD^ HEAD -- apps/api packages"
