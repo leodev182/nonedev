@@ -1,7 +1,10 @@
 import { defineConfig } from 'astro/config'
+import vercel from '@astrojs/vercel'
 
 export default defineConfig({
-  site: 'https://leodev182.github.io',
+  output: 'server',
+  adapter: vercel(),
+  site: 'https://nonedev-web.vercel.app',
   i18n: {
     defaultLocale: 'es',
     locales: ['es', 'en'],

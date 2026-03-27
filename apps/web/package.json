@@ -10,9 +10,10 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/vercel": "^8.2.11",
     "@portfolio/contracts": "workspace:*",
     "astro": "^5.4.0",
-    "@astrojs/check": "^0.9.4",
     "three": "^0.172.0"
   },
   "devDependencies": {
