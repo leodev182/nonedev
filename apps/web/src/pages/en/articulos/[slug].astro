@@ -2,16 +2,11 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/shared/Navbar.astro'
 import { getLocalePath } from '@/i18n'
-import { getArticles } from '@/lib/api'
-import type { Article } from '@portfolio/contracts'
+import { getArticleBySlug } from '@/lib/api'
 
-export async function getStaticPaths() {
-  const articles = await getArticles({ locale: 'en', pageSize: 50 })
-  return articles.map(a => ({ params: { slug: a.slug }, props: { article: a } }))
-}
-
-interface Props { article: Article }
-const { article } = Astro.props
+const { slug } = Astro.params
+const article = await getArticleBySlug(slug!)
+if (!article) return Astro.redirect('/en/articulos')
 const locale = 'en'
 
 function md(text: string): string {
