@@ -18,6 +18,7 @@ const envSchema = z.object({
 const result = envSchema.safeParse(process.env)
 if (!result.success) {
   console.error('[env] Validation failed:', JSON.stringify(result.error.flatten()))
+  throw new Error(`[env] Missing or invalid environment variables: ${Object.keys(result.error.flatten().fieldErrors).join(', ')}`)
 }
-export const env = (result.success ? result.data : process.env) as z.infer<typeof envSchema>
+export const env = result.data
 export type Env = z.infer<typeof envSchema>
