@@ -4,5 +4,8 @@
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "framework": null,
   "ignoreCommand": "! git diff HEAD~1 --name-only | grep -q '^apps/admin\\|^packages/'",
-  "rewrites": [{ "source": "/((?!.*\\.).*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://nonedev-api.vercel.app/api/:path*" },
+    { "source": "/((?!.*\\.).*)", "destination": "/index.html" }
+  ]
 }
