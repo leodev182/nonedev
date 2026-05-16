@@ -4,12 +4,12 @@
   "private": true,
   "exports": {
     ".": {
-      "require": "./src/index.ts",
-      "import": "./src/index.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
       "types": "./src/index.ts"
     }
   },
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
     "type-check": "tsc --noEmit",
