@@ -1,7 +1,11 @@
 {
   "framework": null,
   "outputDirectory": ".",
-  "outputFileTracingRoot": "../../",
+  "functions": {
+    "api/index.ts": {
+      "includeFiles": "node_modules/@portfolio/contracts/dist/**"
+    }
+  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/api" }
   ],
