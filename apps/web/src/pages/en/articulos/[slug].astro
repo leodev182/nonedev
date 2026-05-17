@@ -3,23 +3,14 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/shared/Navbar.astro'
 import { getLocalePath } from '@/i18n'
 import { getArticleBySlug } from '@/lib/api'
+import { renderMarkdown } from '@/lib/markdown'
 
 const { slug } = Astro.params
 const article = await getArticleBySlug(slug!)
 if (!article) return Astro.redirect('/en/articulos')
 const locale = 'en'
 
-function md(text: string): string {
-  return text
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
-    .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/^(?!<[hbupl])(.+)$/gm, (m) => m.startsWith('<') ? m : `<p>${m}</p>`)
-}
+const content = await renderMarkdown(article.content)
 ---
 
 <BaseLayout locale={locale} title={`${article.title} — nonedev`} description={article.summary}>
@@ -43,7 +34,7 @@ function md(text: string): string {
         </div>
       </header>
 
-      <div class="article-body" set:html={md(article.content)} />
+      <div class="article-body" set:html={content} />
 
       <footer class="article-footer">
         <a href={getLocalePath(locale, '/articulos')} class="back-link">← Back to articles</a>
@@ -54,7 +45,7 @@ function md(text: string): string {
 
 <style>
   .article-page { min-height: 100svh; padding-top: var(--nav-h); }
-  .inner { max-width: 680px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+  .inner { max-width: 720px; margin: 0 auto; padding: 4rem 2rem 6rem; }
   .back-link { display: inline-flex; align-items: center; gap: .4rem; font-size: var(--text-sm); color: var(--color-muted); margin-bottom: 2.5rem; transition: color .2s; }
   .back-link:hover { color: var(--color-text); }
   .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--color-border); }
@@ -64,14 +55,106 @@ function md(text: string): string {
   .article-header__summary { font-size: var(--text-base); color: var(--color-text-secondary); line-height: 1.75; margin-bottom: 1.5rem; }
   .article-header__tags { display: flex; flex-wrap: wrap; gap: .4rem; }
   .pill { font-family: var(--font-mono); font-size: 10px; color: var(--color-muted); background: rgba(255,255,255,.04); border: 1px solid var(--color-border); padding: .2rem .55rem; border-radius: var(--radius-sm); }
+  /* Article body — typography */
   .article-body { font-size: var(--text-base); color: var(--color-text-secondary); line-height: 1.85; }
+  .article-body :global(h1) { font-size: clamp(1.4rem, 2.5vw, 1.75rem); font-weight: 800; color: var(--color-text); margin: 3rem 0 1rem; letter-spacing: -.03em; line-height: 1.2; }
   .article-body :global(h2) { font-size: 1.35rem; font-weight: 700; color: var(--color-text); margin: 2.5rem 0 1rem; letter-spacing: -.02em; }
-  .article-body :global(h3) { font-size: 1.1rem; font-weight: 600; color: var(--color-text); margin: 2rem 0 .75rem; }
+  .article-body :global(h3) { font-size: 1.05rem; font-weight: 600; color: var(--color-text); margin: 2rem 0 .6rem; }
   .article-body :global(p) { margin-bottom: 1.25rem; }
   .article-body :global(strong) { color: var(--color-text); font-weight: 600; }
-  .article-body :global(blockquote) { border-left: 3px solid var(--color-purple); padding-left: 1.25rem; color: var(--color-text-secondary); font-style: italic; margin: 1.5rem 0; }
+  .article-body :global(em) { font-style: italic; }
+  .article-body :global(hr) { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+  .article-body :global(blockquote) { border-left: 3px solid var(--color-purple); padding: .75rem 1.25rem; color: var(--color-text-secondary); margin: 1.75rem 0; background: rgba(139,92,246,.04); border-radius: 0 6px 6px 0; }
+  .article-body :global(blockquote p) { margin: 0; }
   .article-body :global(ul) { padding-left: 1.5rem; margin-bottom: 1.25rem; }
   .article-body :global(li) { margin-bottom: .5rem; list-style: disc; }
+  .article-body :global(code:not(.code-block *)) { font-family: var(--font-mono); font-size: .8em; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 4px; padding: .15em .4em; color: #c9d1d9; }
+
+  /* Code block */
+  .article-body :global(.code-block) {
+    margin: 1.75rem 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.08);
+    overflow: hidden;
+    background: #0d1117;
+  }
+  .article-body :global(.code-block__header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+    background: rgba(255,255,255,.03);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .article-body :global(.code-block__lang) {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,.3);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+  .article-body :global(.code-block__copy) {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,.3);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 5px;
+    padding: .25rem .6rem;
+    cursor: pointer;
+    transition: color .15s, border-color .15s, background .15s;
+  }
+  .article-body :global(.code-block__copy:hover) {
+    color: rgba(255,255,255,.7);
+    border-color: rgba(255,255,255,.2);
+    background: rgba(255,255,255,.05);
+  }
+  .article-body :global(.code-block__copy.copied) {
+    color: #3fb950;
+    border-color: rgba(63,185,80,.3);
+  }
+  .article-body :global(.code-block__body) { overflow-x: auto; }
+  .article-body :global(.code-block .shiki) {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding: 1.1rem 1.4rem !important;
+    background: #0d1117 !important;
+    font-size: .8125rem !important;
+    line-height: 1.75 !important;
+    font-family: var(--font-mono) !important;
+    overflow-x: auto;
+  }
+  .article-body :global(.code-block .shiki code) {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+    color: inherit !important;
+  }
+
   .article-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
   @media (max-width: 640px) { .inner { padding: 2rem 1.25rem 4rem; } }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.code-block__copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const pre = btn.closest('.code-block')?.querySelector('pre')
+      const text = pre?.innerText ?? ''
+      try {
+        await navigator.clipboard.writeText(text)
+        const span = btn.querySelector('span')
+        const origHtml = btn.innerHTML
+        btn.classList.add('copied')
+        if (span) span.textContent = 'Copied!'
+        setTimeout(() => {
+          btn.classList.remove('copied')
+          btn.innerHTML = origHtml
+        }, 2000)
+      } catch {}
+    })
+  })
+</script>
