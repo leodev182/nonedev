@@ -1,2 +1,4 @@
 api/index.js
 dist/
+
+.vercel
