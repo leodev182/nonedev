@@ -26,8 +26,11 @@ export async function findAll(opts: { page: number; pageSize: number; locale?: s
   return { data, total, page, pageSize, totalPages: Math.ceil(total / pageSize) }
 }
 
-export async function findBySlug(slug: string) {
-  const [row] = await db.select().from(articles).where(eq(articles.slug, slug)).limit(1)
+export async function findBySlug(slug: string, locale?: string) {
+  const where = locale
+    ? and(eq(articles.slug, slug), eq(articles.locale, locale))
+    : eq(articles.slug, slug)
+  const [row] = await db.select().from(articles).where(where).limit(1)
   return row ?? null
 }
 

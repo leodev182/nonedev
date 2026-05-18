@@ -51,9 +51,10 @@ export async function getArticles(opts: { locale?: string; pageSize?: number } =
   return result.data
 }
 
-export async function getArticleBySlug(slug: string): Promise<Article | null> {
+export async function getArticleBySlug(slug: string, locale?: string): Promise<Article | null> {
   try {
-    return await apiFetch<Article>(`/api/v1/articles/${slug}`)
+    const params = locale ? `?locale=${locale}` : ''
+    return await apiFetch<Article>(`/api/v1/articles/${slug}${params}`)
   } catch {
     return null
   }

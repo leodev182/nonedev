@@ -12,8 +12,9 @@ export const listArticles = async (c: Context) => {
 }
 
 export const getArticleBySlug = async (c: Context) => {
-  const slug = c.req.param('slug')!
-  const article = await service.getArticleBySlug(slug)
+  const slug   = c.req.param('slug')!
+  const locale = c.req.query('locale')   // 'es' | 'en' | undefined
+  const article = await service.getArticleBySlug(slug, locale)
   if (!article) return c.json({ error: 'Not found' }, 404)
   return c.json({ data: article })
 }

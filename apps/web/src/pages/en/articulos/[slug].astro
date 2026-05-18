@@ -6,9 +6,9 @@ import { getArticleBySlug } from '@/lib/api'
 import { renderMarkdown } from '@/lib/markdown'
 
 const { slug } = Astro.params
-const article = await getArticleBySlug(slug!)
-if (!article) return Astro.redirect('/en/articulos')
 const locale = 'en'
+const article = await getArticleBySlug(slug!, locale)
+if (!article) return Astro.redirect('/en/articulos')
 
 const content = await renderMarkdown(article.content)
 ---
