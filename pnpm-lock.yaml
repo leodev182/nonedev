@@ -169,6 +169,12 @@ importers:
       astro:
         specifier: ^5.4.0
         version: 5.18.1(@types/node@22.19.15)(@vercel/functions@3.4.3)(jiti@1.21.7)(less@4.2.2)(rollup@4.59.0)(sass@1.85.0)(terser@5.39.0)(tsx@4.21.0)(typescript@5.7.3)(yaml@2.8.2)
+      marked:
+        specifier: ^15.0.0
+        version: 15.0.12
+      shiki:
+        specifier: ^3.0.0
+        version: 3.23.0
       three:
         specifier: ^0.172.0
         version: 0.172.0
@@ -4858,6 +4864,11 @@ packages:
 
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
+
+  marked@15.0.12:
+    resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
+    engines: {node: '>= 18'}
+    hasBin: true
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -11674,6 +11685,8 @@ snapshots:
       - supports-color
 
   markdown-table@3.0.4: {}
+
+  marked@15.0.12: {}
 
   math-intrinsics@1.1.0: {}
 
