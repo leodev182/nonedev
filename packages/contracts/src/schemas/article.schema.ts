@@ -11,7 +11,9 @@ export const createArticleSchema = z.object({
   status:     z.enum(['published', 'draft']).default('draft'),
 })
 
-export const updateArticleSchema = createArticleSchema.partial()
+export const updateArticleSchema = createArticleSchema.partial().extend({
+  publishedAt: z.string().datetime().nullable().optional(),
+})
 
 export type CreateArticleInput = z.infer<typeof createArticleSchema>
 export type UpdateArticleInput = z.infer<typeof updateArticleSchema>

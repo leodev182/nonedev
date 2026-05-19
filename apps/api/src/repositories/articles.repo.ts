@@ -26,11 +26,8 @@ export async function findAll(opts: { page: number; pageSize: number; locale?: s
   return { data, total, page, pageSize, totalPages: Math.ceil(total / pageSize) }
 }
 
-export async function findBySlug(slug: string, locale?: string) {
-  const where = locale
-    ? and(eq(articles.slug, slug), eq(articles.locale, locale))
-    : eq(articles.slug, slug)
-  const [row] = await db.select().from(articles).where(where).limit(1)
+export async function findBySlug(slug: string) {
+  const [row] = await db.select().from(articles).where(eq(articles.slug, slug)).limit(1)
   return row ?? null
 }
 
@@ -41,9 +38,15 @@ export async function create(input: CreateArticleInput) {
 }
 
 export async function update(id: string, input: UpdateArticleInput) {
+  const setPayload: Record<string, unknown> = { ...input, updatedAt: new Date() }
+  // Auto-set publishedAt when publishing for the first time
+  if (input.status === 'published' && !('publishedAt' in input)) {
+    const [existing] = await db.select({ publishedAt: articles.publishedAt }).from(articles).where(eq(articles.id, id)).limit(1)
+    if (!existing?.publishedAt) setPayload.publishedAt = new Date()
+  }
   const [row] = await db
     .update(articles)
-    .set({ ...input, updatedAt: new Date() })
+    .set(setPayload)
     .where(eq(articles.id, id))
     .returning()
   return row ?? null

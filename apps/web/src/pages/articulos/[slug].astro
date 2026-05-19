@@ -21,8 +21,8 @@ const content = await renderMarkdown(article.content)
 
       <header class="article-header">
         <div class="article-header__meta">
-          <time datetime={article.publishedAt!}>
-            {new Date(article.publishedAt!).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}
+          <time datetime={article.publishedAt ?? article.createdAt}>
+            {new Date(article.publishedAt ?? article.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}
           </time>
           <span class="dot">·</span>
           <span>{article.readingTimeMin} min de lectura</span>

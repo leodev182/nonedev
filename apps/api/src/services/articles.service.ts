@@ -4,8 +4,8 @@ import * as repo from '../repositories/articles.repo.js'
 export const listArticles = (opts: { page: number; pageSize: number; locale?: string; all?: boolean }) =>
   repo.findAll(opts)
 
-export const getArticleBySlug = (slug: string, locale?: string) =>
-  repo.findBySlug(slug, locale)
+export const getArticleBySlug = (slug: string) =>
+  repo.findBySlug(slug)
 
 export const createArticle = (input: CreateArticleInput) =>
   repo.create(input)
