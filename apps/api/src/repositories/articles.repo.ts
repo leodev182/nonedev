@@ -1,4 +1,4 @@
-import { eq, desc, and } from 'drizzle-orm'
+import { eq, desc, and, sql } from 'drizzle-orm'
 import { db } from '../db/client.js'
 import { articles } from '../db/schema.js'
 import type { CreateArticleInput, UpdateArticleInput } from '@portfolio/contracts'
@@ -17,7 +17,7 @@ export async function findAll(opts: { page: number; pageSize: number; locale?: s
     .select()
     .from(articles)
     .where(where)
-    .orderBy(desc(articles.publishedAt))
+    .orderBy(sql`${articles.publishedAt} DESC NULLS LAST`)
     .limit(pageSize)
     .offset(offset)
 
