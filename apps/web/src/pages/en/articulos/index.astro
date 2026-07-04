@@ -22,8 +22,8 @@ const articles = await getArticles({ locale: 'en', pageSize: 20 })
           <li>
             <a href={getLocalePath(locale, `/articulos/${article.slug}`)} class="article-row">
               <div class="article-row__meta">
-                <time datetime={article.publishedAt!}>
-                  {new Date(article.publishedAt!).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
+                <time datetime={article.publishedAt ?? article.createdAt}>
+                  {new Date(article.publishedAt ?? article.createdAt).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
                 </time>
                 <div class="article-row__tags">
                   {article.tags.slice(0, 3).map(tag => <span class="pill">{tag}</span>)}
