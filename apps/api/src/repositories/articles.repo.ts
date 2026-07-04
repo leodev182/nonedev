@@ -38,7 +38,12 @@ export async function create(input: CreateArticleInput) {
 }
 
 export async function update(id: string, input: UpdateArticleInput) {
-  const setPayload: Record<string, unknown> = { ...input, updatedAt: new Date() }
+  const { publishedAt, ...rest } = input
+  const setPayload: Record<string, unknown> = {
+    ...rest,
+    updatedAt: new Date(),
+    ...(publishedAt !== undefined ? { publishedAt: publishedAt ? new Date(publishedAt) : null } : {}),
+  }
   // Auto-set publishedAt when publishing for the first time
   if (input.status === 'published' && !('publishedAt' in input)) {
     const [existing] = await db.select({ publishedAt: articles.publishedAt }).from(articles).where(eq(articles.id, id)).limit(1)
