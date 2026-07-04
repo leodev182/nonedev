@@ -44,7 +44,7 @@ const articles = await getArticles({ locale: 'es', pageSize: 20 })
 </BaseLayout>
 
 <style>
-  .articles-page { min-height: 100svh; padding-top: var(--nav-h); }
+  .articles-page { min-height: 100svh; padding-top: var(--nav-h); scroll-behavior: smooth; }
   .inner { max-width: 720px; margin: 0 auto; padding: 4rem 2rem 6rem; }
   .back-link { display: inline-flex; align-items: center; gap: .4rem; font-size: var(--text-sm); color: var(--color-muted); margin-bottom: 2.5rem; transition: color .2s; }
   .back-link:hover { color: var(--color-text); }
